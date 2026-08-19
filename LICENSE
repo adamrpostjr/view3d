@@ -2,9 +2,18 @@ MIT License
 
 Copyright (c) 2026 view3d contributors
 
-view3d is an independent re-implementation of fstl
-(https://github.com/fstl-app/fstl), Copyright (c) 2014-2017 Matthew Keeter,
-which is also MIT licensed.
+view3d is a re-implementation of fstl (https://github.com/fstl-app/fstl),
+Copyright (c) 2014-2017 Matthew Keeter, which is MIT licensed. Portions of
+this project are translations of that source and remain subject to its
+license, in particular:
+
+  * the fragment shaders in src/render/shaders/scene.wgsl, ported from
+    fstl's gl/mesh.frag, gl/mesh_light.frag, gl/mesh_surfaceangle.frag and
+    gl/quad.frag, including their color constants;
+  * the camera, projection and viewpoint math in src/camera.rs, ported from
+    fstl's src/canvas.cpp;
+  * the axis and axis-flower geometry in src/render/mod.rs, ported from
+    fstl's src/axis.cpp and src/backdrop.cpp.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

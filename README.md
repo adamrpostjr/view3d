@@ -164,6 +164,13 @@ python3 docs/make-screenshots.py /tmp/view3d-models docs/screenshots
 | `src/app.rs` | Menus, shortcuts, file watching and overlays |
 | `xdg/`, `packaging/` | Desktop integration and the Arch package |
 
-## License
+## License and credit
 
-MIT — see [LICENSE](LICENSE). fstl is MIT licensed, © 2014-2017 Matthew Keeter.
+MIT — see [LICENSE](LICENSE).
+
+view3d exists because [fstl](https://github.com/fstl-app/fstl) by **Matthew
+Keeter** got the important things right, and parts of it are direct
+translations of his work rather than merely inspired by it: the fragment
+shaders, the camera and viewpoint math, and the axis geometry all come from
+fstl's source, which is MIT licensed, © 2014-2017 Matthew Keeter. Those
+portions remain under that license; see [LICENSE](LICENSE) for the specifics.
