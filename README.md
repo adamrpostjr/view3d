@@ -170,7 +170,10 @@ MIT — see [LICENSE](LICENSE).
 
 view3d exists because [fstl](https://github.com/fstl-app/fstl) by **Matthew
 Keeter** got the important things right, and parts of it are direct
-translations of his work rather than merely inspired by it: the fragment
+translations of that work rather than merely inspired by it: the fragment
 shaders, the camera and viewpoint math, and the axis geometry all come from
-fstl's source, which is MIT licensed, © 2014-2017 Matthew Keeter. Those
-portions remain under that license; see [LICENSE](LICENSE) for the specifics.
+fstl's source. fstl is MIT licensed — it ships no LICENSE file, but its README
+carries the MIT terms under "Copyright (c) 2014-2017 Matthew Keeter" — and
+those portions remain under that license. Some of what we ported (the mesh
+light and surface angle shaders) postdates that copyright line and came from
+later fstl contributors. See [LICENSE](LICENSE) for the file-by-file detail.
