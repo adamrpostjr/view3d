@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=view3d
+GenericName=3D Model Viewer
+Comment=Fast viewer for STL, 3MF and OBJ models
+Exec=view3d %f
+TryExec=view3d
+Icon=view3d
+Terminal=false
+Categories=Graphics;Viewer;3DGraphics;
+MimeType=model/stl;model/3mf;application/vnd.ms-package.3dmanufacturing-3dmodel+xml;model/obj;
+Keywords=stl;3mf;obj;mesh;3d;print;

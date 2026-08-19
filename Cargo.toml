@@ -1,0 +1,47 @@
+[package]
+name = "view3d"
+version = "0.1.0"
+edition = "2021"
+description = "A very fast STL / 3MF / OBJ viewer"
+license = "MIT"
+
+[lib]
+name = "view3d"
+path = "src/lib.rs"
+
+[[bin]]
+name = "view3d"
+path = "src/main.rs"
+
+[dependencies]
+eframe = { version = "0.36.1", default-features = false, features = ["wgpu", "persistence", "default_fonts", "wayland", "x11"] }
+egui = "0.36.1"
+bytemuck = { version = "1", features = ["derive"] }
+glam = { version = "0.33", features = ["bytemuck"] }
+rayon = "1"
+memmap2 = "0.9"
+rustc-hash = "2"
+zip = { version = "8", default-features = false, features = ["deflate"] }
+quick-xml = "0.41"
+tobj = "4"
+rfd = "0.17"
+notify = "8"
+serde = { version = "1", features = ["derive"] }
+anyhow = "1"
+image = { version = "0.25", default-features = false, features = ["png"] }
+log = "0.4"
+# Direct winit access so the Linux backend can be chosen at startup; must stay
+# on the version eframe pins.
+winit = { version = "0.30.13", default-features = false, features = ["x11", "wayland", "rwh_06"] }
+env_logger = "0.11"
+
+[dev-dependencies]
+zip = { version = "8", default-features = false, features = ["deflate"] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+
+[profile.dev.package."*"]
+opt-level = 2

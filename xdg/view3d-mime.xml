@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Only declares the types the shared MIME database may not know yet.
+     model/stl and model/obj are registered upstream. -->
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="model/3mf">
+    <comment>3D Manufacturing Format model</comment>
+    <sub-class-of type="application/zip"/>
+    <glob pattern="*.3mf"/>
+    <alias type="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/>
+  </mime-type>
+</mime-info>

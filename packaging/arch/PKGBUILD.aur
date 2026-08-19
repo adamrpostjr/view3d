@@ -1,0 +1,81 @@
+# AUR template for view3d-git. Before publishing:
+#   1. push this project to a public git repo,
+#   2. replace CHANGEME below with its URL,
+#   3. rename this file to PKGBUILD in a fresh AUR clone,
+#   4. makepkg --printsrcinfo > .SRCINFO && git commit -am 'initial import'
+#
+# Maintainer: Your Name <you@example.com>
+
+pkgname=view3d-git
+pkgver=0.1.0.r0.gunknown
+pkgrel=1
+pkgdesc='Fast viewer for STL, 3MF and OBJ models (git version)'
+arch=('x86_64' 'aarch64')
+url='https://github.com/adamrpostjr/view3d'
+license=('MIT')
+depends=(
+  'gcc-libs'
+  'glibc'
+  'libx11'
+  'libxcursor'
+  'libxi'
+  'libxkbcommon'
+  'libxkbcommon-x11'
+  'libxrandr'
+  'vulkan-icd-loader'
+  'wayland'
+)
+makedepends=('cargo' 'git')
+optdepends=('xdg-desktop-portal: native Open/Save dialogs')
+provides=('view3d')
+conflicts=('view3d')
+options=('!lto')
+source=("view3d::git+https://github.com/adamrpostjr/view3d.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/view3d"
+  # 0.1.0.r14.gabc1234 — version from Cargo.toml, then commits since the tag.
+  local ver
+  ver=$(sed -n '0,/^version = /s/^version = "\(.*\)"/\1/p' Cargo.toml)
+  printf '%s.r%s.g%s' "$ver" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+  cd "$srcdir/view3d"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/^host: //p')"
+}
+
+build() {
+  cd "$srcdir/view3d"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo build --frozen --release
+}
+
+check() {
+  cd "$srcdir/view3d"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR=target
+  cargo test --frozen --release
+}
+
+package() {
+  cd "$srcdir/view3d"
+
+  install -Dm755 target/release/view3d "$pkgdir/usr/bin/view3d"
+  install -Dm644 xdg/view3d.desktop "$pkgdir/usr/share/applications/view3d.desktop"
+  install -Dm644 xdg/view3d-mime.xml "$pkgdir/usr/share/mime/packages/view3d.xml"
+  install -Dm644 xdg/view3d.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/view3d.svg"
+
+  local png size
+  for png in xdg/icons/view3d_*.png; do
+    size="${png##*view3d_}"
+    size="${size%.png}"
+    install -Dm644 "$png" "$pkgdir/usr/share/icons/hicolor/$size/apps/view3d.png"
+  done
+
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/view3d/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/view3d/README.md"
+}

@@ -1,0 +1,74 @@
+# Local PKGBUILD: builds view3d from this working tree and installs it as a
+# proper pacman package, so `pacman -R view3d` cleans everything up again.
+#
+#   cd packaging/arch && makepkg -si
+#
+# For the AUR, use PKGBUILD.aur instead (it builds from a public git URL).
+
+pkgname=view3d
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Fast viewer for STL, 3MF and OBJ models'
+arch=('x86_64' 'aarch64')
+url='https://github.com/adamrpostjr/view3d'
+license=('MIT')
+depends=(
+  'gcc-libs'
+  'glibc'
+  'libx11'
+  'libxcursor'
+  'libxi'
+  'libxkbcommon'
+  'libxkbcommon-x11'
+  'libxrandr'
+  'vulkan-icd-loader'
+  'wayland'
+)
+makedepends=('cargo')
+optdepends=('xdg-desktop-portal: native Open/Save dialogs')
+# The release profile already sets its own LTO; let cargo own that decision.
+options=('!lto')
+source=()
+sha256sums=()
+
+# Everything is built from the checkout this PKGBUILD lives in.
+_root="$(realpath "$startdir/../..")"
+
+prepare() {
+  cd "$_root"
+  export RUSTUP_TOOLCHAIN=stable
+  cargo fetch --locked --target "$(rustc -vV | sed -n 's/^host: //p')"
+}
+
+build() {
+  cd "$_root"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR="$srcdir/target"
+  cargo build --frozen --release
+}
+
+check() {
+  cd "$_root"
+  export RUSTUP_TOOLCHAIN=stable
+  export CARGO_TARGET_DIR="$srcdir/target"
+  cargo test --frozen --release
+}
+
+package() {
+  cd "$_root"
+
+  install -Dm755 "$srcdir/target/release/view3d" "$pkgdir/usr/bin/view3d"
+  install -Dm644 xdg/view3d.desktop "$pkgdir/usr/share/applications/view3d.desktop"
+  install -Dm644 xdg/view3d-mime.xml "$pkgdir/usr/share/mime/packages/view3d.xml"
+  install -Dm644 xdg/view3d.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/view3d.svg"
+
+  local png size
+  for png in xdg/icons/view3d_*.png; do
+    size="${png##*view3d_}"
+    size="${size%.png}"
+    install -Dm644 "$png" "$pkgdir/usr/share/icons/hicolor/$size/apps/view3d.png"
+  done
+
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+}
